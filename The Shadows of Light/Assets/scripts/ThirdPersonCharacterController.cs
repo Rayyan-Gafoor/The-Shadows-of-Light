@@ -19,6 +19,7 @@ public class ThirdPersonCharacterController : MonoBehaviour
     public float air_multiply;
     bool can_jump;
 
+
     [Header("Movement States")]// checks the players current movement state
     public movement_state player_state;
     public enum movement_state
@@ -147,9 +148,11 @@ public class ThirdPersonCharacterController : MonoBehaviour
         orientate();
         move_dir = orientation.forward * vert_input + orientation.right * hori_input;
         transform_rotation();
+        //Debug.Log($"[TPCC] MovePlayer() - OnSlop: {on_slope()}, Exit: {!exit_slope}");
         if (on_slope() && !exit_slope)
         {
-            rb.AddForce(get_slope_dir() * move_speed * 20, ForceMode.Force);
+            Debug.Log($"[TPCC] OnSlop() && !exit_slip -- {get_slope_dir()}");
+            rb.AddForce(get_slope_dir() * move_speed * 20f, ForceMode.Force);
         }
         if (is_grounded)
         {
@@ -195,9 +198,16 @@ public class ThirdPersonCharacterController : MonoBehaviour
     //////////////---------Checks Slope Status and Controls slop Movement------------////////////
     bool on_slope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slope_hit, player_height * 0.5f + 0.3f))
+        //Debug.Log("OnSlope()");
+        //var max_distance = player_height * 0.5f + 0.3f;
+        var max_distance = float.MaxValue;
+        RaycastHit hitInfo;
+        var isHit = Physics.Raycast(transform.position, Vector3.down, out hitInfo, max_distance, ground_mask);
+        if (isHit)
         {
-            float angle = Vector3.Angle(Vector3.up, slope_hit.normal);
+            //Debug.Log("[TPCC] on_slope() -- raycast valid");
+            float angle = Vector3.Angle(Vector3.up, hitInfo.normal);
+            //Debug.Log($"[On_Slope] Angle: {angle}, Normal: {hitInfo.normal}");
             return angle < max_angle && angle != 0;
         }
         else
