@@ -195,9 +195,23 @@ public class ThirdPersonCharacterController : MonoBehaviour
     //////////////---------Checks Slope Status and Controls slop Movement------------////////////
     bool on_slope()
     {
+<<<<<<< Updated upstream
         if (Physics.Raycast(transform.position, Vector3.down, out slope_hit, player_height * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slope_hit.normal);
+=======
+        //Debug.Log("OnSlope()");
+        //var max_distance = player_height * 0.5f + 0.3f;
+        //var max_distance = float.MaxValue;
+        //RaycastHit hitInfo;
+        //var isHit = Physics.Raycast(transform.position, Vector3.down, out hitInfo, max_distance, ground_mask);
+        //if (isHit)
+        if(Physics.Raycast(transform.position, Vector3.down, out slope_hit, player_height * 0.5f + 0.3f))
+        {
+            //Debug.Log("[TPCC] on_slope() -- raycast valid");
+            float angle = Vector3.Angle(Vector3.up, slope_hit.normal);
+            //Debug.Log($"[On_Slope] Angle: {angle}, Normal: {hitInfo.normal}");
+>>>>>>> Stashed changes
             return angle < max_angle && angle != 0;
         }
         else
